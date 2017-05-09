@@ -1,0 +1,15 @@
+//**This algorithm is cited from: http://www.cs.utexas.edu/~moore/best-ideas/mjrty/
+//* Take problem 169 Majority Element as an example
+int majorityElement(vector<int>& nums) {
+       int major=nums[0], cnt=1; // "major" represents the current candidate, "cnt" determines whether update "major" or not;
+       for(int i=1; i<nums.size(); i++)
+       {
+           if(cnt==0){
+               major=nums[i];
+               cnt++;
+           }
+           else if(nums[i]==major) cnt++;
+           else cnt--;
+       }
+       return major;
+    }
