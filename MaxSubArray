@@ -1,0 +1,17 @@
+//**This problem can be solveed both in divide and conquer approach and linear algorithm
+// Here is a linear-time solution
+// LeetCode Problem 53 Maximum Subarray
+
+int maxSubArray(vector<int>& nums) {
+        int maxConSum=nums[0];   // continuous maxSum that contains current element
+        int maxSubSum = nums[0];  // current max of subarray sum that doesn't contain current element
+        for(int i=1; i<nums.size(); i++)
+        {
+            // iteration
+            maxConSum = nums[i] + max(0, maxConSum); 
+            maxSubSum = max(maxSubSum, maxConSum);
+        }
+        return maxSubSum;
+    }
+    
+   // another dc approach can be seen in Introduction to Algorithm
