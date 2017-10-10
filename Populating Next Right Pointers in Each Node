@@ -1,0 +1,42 @@
+## LeetCode 
+## 116. Populating Next Right Pointers in Each Node
+/**** Given a binary tree
+
+    struct TreeLinkNode {
+      TreeLinkNode *left;
+      TreeLinkNode *right;
+      TreeLinkNode *next;
+    }
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+
+Note:
+
+You may only use constant extra space.
+You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
+****/
+
+Here are the two-pointer iterative solution:
+
+void connect(TreeLinkNode *root) {
+        if(root == NULL)
+            return;
+        TreeLinkNode *pre = root;
+        TreeLinkNode *cur = NULL;
+        while(pre->left != NULL)
+        {
+            cur = pre;
+            while(cur != NULL)  // iterate in current level
+            {
+                cur->left->next = cur->right; // deal with leftChild and rightChild 
+                if(cur->next != NULL)
+                    cur->right->next = cur->next->left;
+                cur = cur->next;
+            }
+            pre = pre->left;  // record level
+        }
+    }
+    
+
+
