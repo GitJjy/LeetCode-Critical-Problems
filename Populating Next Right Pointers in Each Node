@@ -37,6 +37,62 @@ void connect(TreeLinkNode *root) {
             pre = pre->left;  // record level
         }
     }
+  
+  
+  
+  The following code are the ordinary version(given an ordinary binary tree):
+  void connect(TreeLinkNode *root) {
+        if(root != NULL)
+        {
+            TreeLinkNode *pre = root;   //  the first non-empty node in the next level
+            TreeLinkNode *cur = NULL;   //  the current node to link its children 
+            TreeLinkNode *curLink = NULL;   //  current node to populate the next pointer
+            while(pre != NULL)
+            {
+                cur = pre;
+                curLink = NULL;
+                pre = NULL;
+                while(cur != NULL)
+                {
+                    if(cur->left != NULL)
+                    {
+                        if(curLink == NULL)
+                        {   curLink = cur->left;
+                            pre = curLink;
+                        }
+                        else
+                        {
+                            curLink->next = cur->left;
+                            curLink = curLink->next;
+                        }
+                        if(cur->right != NULL)
+                        {
+                            curLink->next = cur->right;
+                            curLink = curLink->next;
+                        } 
+                    }
+                    else 
+                    {
+                        if(cur->right != NULL)
+                        {
+                            if(curLink == NULL)
+                            {
+                                curLink = cur->right;
+                                pre = curLink;
+                            } 
+                            else
+                            {
+                                curLink->next = cur->right;
+                                curLink = curLink->next;
+                            }
+                        }
+                    }
+                    
+                    cur = cur->next;
+                }
+            }
+        } 
+    }
     
 
 
