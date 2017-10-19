@@ -1,0 +1,17 @@
+/**
+Given an array of integers, every element appears twice except for one. Find that single one.
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory? 
+**/
+
+// Here is an excellent solution:
+int singleNumber(vector<int>& nums) {
+        int len = nums.size();
+        if (!len)
+            return 0;
+        int res = nums[0];
+        for(int i = 1; i < len; ++i){
+            res ^= nums[i]; // xor operator that make the couple numbers zero, left single number alone
+        }
+        return res;
+    }
