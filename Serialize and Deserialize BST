@@ -1,0 +1,84 @@
+/**
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment. 
+Design an algorithm to serialize and deserialize a binary search tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary search tree can be serialized to a string and this string can be deserialized to the original tree structure.
+The encoded string should be as compact as possible. 
+Note: Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+*/
+
+// Here is my solution:
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root==NULL)
+            return "";
+        else
+        //  preorder traversal with "()" to contain a node which is encoded string
+            return "(" + to_string(root->val) + ")" + serialize(root->left) + serialize(root->right);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        vector<int> intData = dataTrans(data);
+        int low = 0, high = intData.size()-1;
+        return buildTree(intData, low, high);
+    }
+    
+    // based on preorder traversal sequence and the rule of BST, we can 
+    // construct our original tree recursively
+    TreeNode* buildTree(vector<int>& data, int low, int high)
+    {
+        if(low == -1) 
+            return NULL;
+        if(low <= high)
+        {
+            int midVal = data[low]; // current root node's data
+            int lLow = -1, lHigh = -1;  // find the boundary of left subtree and the right one
+            int rLow = -1, rHigh = -1;
+            for(int i=low+1; i<=high; i++)
+            {
+                if(data[i] < midVal)
+                {
+                    if(lLow==-1)
+                        lLow = i;
+                    if((i+1<=high && data[i+1] > midVal) || i==high)
+                        lHigh = i;
+                }
+                else
+                {
+                    if(rLow==-1)
+                        rLow = i;
+                    if(i==high)
+                        rHigh = i;
+                }
+            }
+            TreeNode *root = new TreeNode(midVal);
+            root->left = buildTree(data, lLow, lHigh);
+            root->right = buildTree(data, rLow, rHigh);
+            return root;
+        }
+        return NULL;  
+    }
+    vector<int> dataTrans(string data)  //  translate string data into int data
+    {
+        vector<int> res;
+        for(int i=0, l, r; i<data.length(); i++)
+        {
+            // detect "(" and ")" to translate a node
+            if(data[i] == '(')
+                l = i;
+            if(data[i] == ')')
+            {
+                r = i;
+                /*stringstream ss;
+                ss<<data.substr(l+1,r-l-1);
+                int tmp;
+                ss>>tmp;
+                */
+                res.push_back(stoi(data.substr(l+1,r-l-1)));
+            }   
+        }
+        return res;
+    }
+};
