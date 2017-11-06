@@ -1,0 +1,32 @@
+/***
+  Given a binary tree, return all duplicate subtrees. For each kind of duplicate subtrees, you only need to return the root node of any one of them. 
+  Two trees are duplicate if they have the same structure with same node values. 
+  Therefore, you need to return above trees' root in the form of a list. 
+ ***/
+ 
+ /**
+  Here is a brilliant solution, first serialize the tree with its structure and store it in a hash map recursively,
+  so that every subtree will be serialized and identified in hash map. Then just check the hash map to get the duplicate
+  ones
+ **/
+ 
+ class Solution {
+public:
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        unordered_map<string, vector<TreeNode*>> map;  
+        vector<TreeNode*> dups;
+        serialize(root, map);  // serialize(encode) every subtree and store its id in the hash map
+        for (auto it = map.begin(); it != map.end(); it++) {
+            if (it->second.size() > 1) dups.push_back(it->second[0]);
+        }
+        return dups;
+    }
+private:
+    string serialize(TreeNode* node, unordered_map<string, vector<TreeNode*>>& map) {
+        if (!node) return "";
+        // encode recursively
+        string s = "(" + serialize(node->left, map) + to_string(node->val) + serialize(node->right, map) + ")";
+        map[s].push_back(node); // store the id
+        return s;
+    }
+};
