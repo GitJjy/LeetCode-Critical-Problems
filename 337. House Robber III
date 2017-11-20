@@ -1,0 +1,40 @@
+/***
+  The thief has found himself a new place for his thievery again. There is only one entrance to this area, called the "root." 
+Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that "all houses in this place 
+forms a binary tree". It will automatically contact the police if two directly-linked houses were broken into on the same night. 
+Determine the maximum amount of money the thief can rob tonight without alerting the police.
+***/
+
+/**分析：
+  对于以node为根节点的子树，其满足条件的最大和有两种可能：1、包含node结点(maxSum1)； 2、不包含node节点(maxSum2)。所以，
+最大和就是由这两种可能求出的子最大和的最大值，而这两种最大和又可以递归地求得，即以下公式：
+    node.maxSum1 = node.left.maxSum2 + node.value + node.right.maxSum2
+    node.maxSum2 = node.left.maxSum + node.right.maxSum
+    node.maxSum = max(node.maxSum1, node.maxSum2)
+    递归函数helper返回（node.maxSum1, node.maxSum2）将信息传播回上层调用用来更新上层的值
+至于递归基则很简单，即当node为NULL时，返回（0，0）即可。
+// Here is my solution:
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        pair<int, int> maxSums = helper(root);
+        return max(maxSums.first, maxSums.second);
+    }
+    
+    pair<int, int> helper(TreeNode* node) 
+    {
+        if(node==NULL)
+            return make_pair(0,0);
+        else
+        {
+            int maxSum1, maxSum2;
+            pair<int, int> lBranch = helper(node->left); // 求出左子树的maxSum1以及maxSum2
+            pair<int, int> rBranch = helper(node->right);
+            int lmaxSum1 = lBranch.first, lmaxSum2 = lBranch.second;
+            int rmaxSum1 = rBranch.first, rmaxSum2 = rBranch.second;
+            maxSum1 = lmaxSum2 + node->val + rmaxSum2; // 根据公式更新node的maxSum1和maxSum2
+            maxSum2 = max(lmaxSum1, lmaxSum2) + max(rmaxSum1, rmaxSum2);
+            return make_pair(maxSum1, maxSum2);
+        }
+    }
+};
