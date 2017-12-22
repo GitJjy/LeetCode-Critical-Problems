@@ -38,9 +38,31 @@ int numberOfArithmeticSlices(vector<int>& A) {
                     isAri[i][j] = false;
                 }
             }
-        }
+          }
         return cnt;
         
     }
+    /**
+    大神用一个一维数组来保存子问题的解，数组中第i个元素，即dp[i]，表示所有以dp[i]为结尾的序列中等差序列的个数，初始时dp[i]=0,经分析，
+    有如下递推公式:
+    dp[i] = dp[i-1] + 1, if A[i] - A[i-1] == A[i-1] - A[i-2]
+          = 0, else
+    所以代码如下：
+    **/
+          int numberOfArithmeticSlices(vector<int>& A) {
+        int n = A.size();
+        int res = 0;
+        vector<int> dp(n, 0);
+        for(int i=2; i<n; i++)
+        {
+            if(A[i] - A[i-1] == A[i-1] - A[i-2])
+            {
+                dp[i] = dp[i-1] + 1;
+                res += dp[i];
+            }
+        }
+        return res;
+    }
+        
     
     
